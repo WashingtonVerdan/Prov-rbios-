@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:">
-    <title>Provérbio Diário - @washingtonverdan</title>
+    <title>Provérbios Sagrados - @washingtonverdan</title>
     <style>
         :root {
-            --primary: #2A2A72;
-            --secondary: #009FFD;
-            --accent: #FFA400;
+            --primary: #2C3E50;
+            --secondary: #3498DB;
+            --accent: #E74C3C;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Merriweather', serif;
         }
 
         body {
@@ -39,23 +39,32 @@
         }
 
         .proverbio-container {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 2rem;
+            padding: 2.5rem;
             margin: 2rem 0;
-            min-height: 300px;
+            min-height: 400px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
             position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .proverbio-texto {
-            font-size: 1.8rem;
-            line-height: 1.5;
+            font-size: 2rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
             font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .proverbio-referencia {
+            font-size: 1.4rem;
+            opacity: 0.9;
             font-style: italic;
+            color: #ECF0F1;
         }
 
         .botoes {
@@ -68,72 +77,70 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: transform 0.3s, opacity 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
         }
 
         .marca-agua {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             opacity: 0.7;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            font-family: 'Arial', sans-serif;
         }
 
         footer {
             margin-top: 3rem;
-            padding: 1rem;
-            font-size: 0.9rem;
+            padding: 1.5rem;
+            font-size: 1rem;
             opacity: 0.8;
         }
 
         @media (max-width: 768px) {
-            .proverbio-texto {
-                font-size: 1.4rem;
-            }
+            .proverbio-texto { font-size: 1.6rem; }
+            .proverbio-referencia { font-size: 1.2rem; }
         }
     </style>
+    <!-- Carrega a fonte Merriweather -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📖 Provérbio Diário</h1>
-            <p>Atualizado diariamente às 00:00</p>
+            <h1>📖 Provérbios Diários</h1>
+            <p>Sabedoria divina para cada dia</p>
         </header>
 
         <div class="proverbio-container" id="cardProverbio">
             <div class="proverbio-texto" id="proverbioTexto"></div>
+            <div class="proverbio-referencia" id="proverbioReferencia"></div>
             <div class="marca-agua">@washingtonverdan</div>
         </div>
 
         <div class="botoes">
             <button onclick="compartilharImagem()" id="btnCompartilhar">
-                📸 Compartilhar Provérbio
+                ✨ Compartilhar Sabedoria
             </button>
         </div>
 
         <footer>
-            Inspiração diária para sua vida • Atualizado em: <span id="dataAtualizacao"></span>
+            "Porque o Senhor dá a sabedoria; de sua boca procedem o conhecimento e o entendimento" - Provérbios 2:6
         </footer>
     </div>
 
-    <!-- Biblioteca para gerar imagem -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <!-- Debug para mobile -->
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
+    
     
 <script>
         const proverbios = [
@@ -1055,52 +1062,52 @@
  
 ];        
 
-// Gerar provérbio do dia
-        function gerarProverbioDoDia() {
+            function gerarProverbioDoDia() {
             const dataAtual = new Date();
             const seed = dataAtual.getFullYear() + dataAtual.getMonth() + dataAtual.getDate();
-            const indice = Math.floor(seed % proverbios.length);
+            const indice = seed % proverbios.length;
+            const proverbioAtual = proverbios[indice];
             
-            document.getElementById('proverbioTexto').textContent = proverbios[indice];
+            document.getElementById('proverbioTexto').textContent = proverbioAtual.texto;
+            document.getElementById('proverbioReferencia').textContent = proverbioAtual.referencia;
             document.getElementById('dataAtualizacao').textContent = dataAtual.toLocaleDateString();
         }
 
-        // Compartilhar como imagem
         async function compartilharImagem() {
             const btn = document.getElementById('btnCompartilhar');
             btn.disabled = true;
-            btn.innerHTML = '⏳ Gerando imagem...';
+            btn.innerHTML = '🕊️ Gerando bênção...';
 
             try {
                 const card = document.getElementById('cardProverbio');
                 
-                // Configurar a escala para melhor qualidade
                 const options = {
                     scale: 3,
                     useCORS: true,
+                    backgroundColor: null,
                     logging: true
                 };
 
-                // Gerar imagem
                 const canvas = await html2canvas(card, options);
                 const imagem = canvas.toDataURL('image/png');
 
-                // Criar link para download
+                // Forçar download no Instagram
                 const link = document.createElement('a');
                 link.download = `proverbio-${new Date().toISOString().split('T')[0]}.png`;
                 link.href = imagem;
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
 
             } catch (error) {
-                alert('Erro ao gerar imagem! Tente novamente.');
+                alert('Deus está refinando nosso código! Tente novamente.');
                 console.error(error);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '📸 Compartilhar Provérbio';
+                btn.innerHTML = '✨ Compartilhar Sabedoria';
             }
         }
 
-        // Atualizar diariamente
         function verificarAtualizacaoDiaria() {
             const agora = new Date();
             const amanha = new Date(agora);
@@ -1109,15 +1116,13 @@
 
             setTimeout(() => {
                 gerarProverbioDoDia();
-                setInterval(gerarProverbioDoDia, 86400000); // 24 horas
+                setInterval(gerarProverbioDoDia, 86400000);
             }, amanha - agora);
         }
 
         // Inicialização
         gerarProverbioDoDia();
         verificarAtualizacaoDiaria();
-
-        // Adaptar eventos para Instagram
         document.getElementById('btnCompartilhar').addEventListener('touchstart', compartilharImagem);
     </script>
 </body>
