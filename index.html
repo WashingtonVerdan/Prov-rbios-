@@ -1088,79 +1088,79 @@
 ];        
 
 function getRandomIndex() {
-            return Math.floor(Math.random() * proverbios.length);
-        }
+    return Math.floor(Math.random() * proverbios.length);
+}
 
-        function updateProverbio(index) {
-            const proverbio = proverbios[index];
-            document.getElementById('proverbio').textContent = `“${proverbio.texto}”`;
-            document.getElementById('referencia').textContent = proverbio.referencia;
-        }
+function updateProverbio(index) {
+    const proverbio = proverbios[index];
+    document.getElementById('proverbio').textContent = `“${proverbio.texto}”`;
+    document.getElementById('referencia').textContent = proverbio.referencia;
+}
 
-        function showRandomProverb() {
-            const randomIndex = getRandomIndex();
-            updateProverbio(randomIndex);
-        }
+function showRandomProverb() {
+    const randomIndex = getRandomIndex();
+    updateProverbio(randomIndex);
+}
 
-        async function generateProverbImage() {
-            const canvas = document.getElementById('hiddenCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Configurações do canvas
-            canvas.width = 800;
-            canvas.height = 800;
-            
-            // Fundo
-            ctx.fillStyle = '#f5e6d3';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Estilo do texto
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#2c3e50';
-            
-            // Texto do provérbio
-            const proverbio = document.getElementById('proverbio').textContent;
-            ctx.font = '30px "Playfair Display"';
-            wrapText(ctx, proverbio, 400, 300, 600, 40);
-            
-            // Referência
-            ctx.font = 'italic 25px "Roboto"';
-            ctx.fillText(document.getElementById('referencia').textContent, 400, 500);
-            
-            // Marca d'água
-            ctx.fillStyle = 'rgba(44, 62, 80, 0.2)';
-            ctx.font = '40px "Playfair Display"';
-            ctx.fillText('Sabedoria do Dia', 400, 700);
-            
-            return await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
-        }
+async function generateProverbImage() {
+    const canvas = document.getElementById('hiddenCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Configurações do canvas
+    canvas.width = 800;
+    canvas.height = 800;
+    
+    // Fundo
+    ctx.fillStyle = '#f5e6d3';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Estilo do texto
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#2c3e50';
+    
+    // Texto do provérbio
+    const proverbio = document.getElementById('proverbio').textContent;
+    ctx.font = '30px "Playfair Display"';
+    wrapText(ctx, proverbio, 400, 300, 600, 40);
+    
+    // Referência
+    ctx.font = 'italic 25px "Roboto"';
+    ctx.fillText(document.getElementById('referencia').textContent, 400, 500);
+    
+    // Marca d'água
+    ctx.fillStyle = 'rgba(44, 62, 80, 0.2)';
+    ctx.font = '40px "Playfair Display"';
+    ctx.fillText('Sabedoria do Dia', 400, 700);
+    
+    return await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+}
 
-        function wrapText(context, text, x, y, maxWidth, lineHeight) {
-            const words = text.split(' ');
-            let line = '';
-            let lines = [];
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    let lines = [];
 
-            for (let n = 0; n < words.length; n++) {
-                const testLine = line + words[n] + ' ';
-                const metrics = context.measureText(testLine);
-                const testWidth = metrics.width;
-                
-                if (testWidth > maxWidth && n > 0) {
-                    lines.push(line);
-                    line = words[n] + ' ';
-                } else {
-                    line = testLine;
-                }
-            }
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        
+        if (testWidth > maxWidth && n > 0) {
             lines.push(line);
-
-            for (let i = 0; i < lines.length; i++) {
-                context.fillText(lines[i], x, y + (i * lineHeight));
-            }
+            line = words[n] + ' ';
+        } else {
+            line = testLine;
         }
+    }
+    lines.push(line);
 
-        async function saveProverbImage() {
+    for (let i = 0; i < lines.length; i++) {
+        context.fillText(lines[i], x, y + (i * lineHeight));
+    }
+}
+
+async function saveProverbImage() {
     try {
         const imageFile = await generateProverbImage();
         const link = document.createElement('a');
@@ -1171,43 +1171,60 @@ function getRandomIndex() {
         console.log('Erro ao salvar a imagem:', error);
     }
 }
-                
-            
-        function updateDateTime() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateTime = new Date().toLocaleDateString('pt-BR', options);
-            document.getElementById('data').textContent = dateTime;
+
+function updateDateTime() {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateTime = new Date().toLocaleDateString('pt-BR', options);
+    document.getElementById('data').textContent = dateTime;
+}
+
+// Forçar abertura de links no navegador externo (corrige bloqueio do Instagram)
+function openExternalLink(event, url) {
+    event.preventDefault();
+    window.open(url, '_system');
+}
+
+// Corrigir botões para funcionar no Instagram
+function handleClick(event) {
+    event.preventDefault();
+    let button = event.currentTarget;
+
+    if (button.getAttribute('onclick')) {
+        let functionName = button.getAttribute('onclick').replace('()', '');
+        if (typeof window[functionName] === 'function') {
+            window[functionName]();
         }
+    }
+}
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', () => {
-            updateProverbio(getRandomIndex());
-            updateDateTime();
-            
-            // Atualizar diariamente às 00:00
-            const now = new Date();
-            const night = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate() + 1
-            );
-            const msToMidnight = night - now;
-            
-            setTimeout(() => {
-                window.location.reload();
-            }, msToMidnight);
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    updateProverbio(getRandomIndex());
+    updateDateTime();
+    
+    // Atualizar diariamente às 00:00 sem usar reload
+    const now = new Date();
+    const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const msToMidnight = night - now;
+    
+    setTimeout(() => {
+        window.location.href = window.location.href; // Evita bloqueio do Instagram
+    }, msToMidnight);
 
-            // Atualizar data a cada minuto
-            setInterval(updateDateTime, 60000);
-        });
+    // Atualizar data a cada minuto
+    setInterval(updateDateTime, 60000);
+});
 
-        // Hotkeys
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') showRandomProverb();
-        });
-        // Exemplo: Adicionar ambos os listeners
-   element.addEventListener('click', handleClick);
-   element.addEventListener('touchstart', handleClick);
+// Adicionar eventos para todos os botões corrigindo o erro do Instagram
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', handleClick);
+    button.addEventListener('touchstart', handleClick);
+});
+
+// Atalho para espaço (teclado)
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') showRandomProverb();
+});
     </script>
 </body>
 </html>
