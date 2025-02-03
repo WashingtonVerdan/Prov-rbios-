@@ -2,155 +2,183 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:">
-    <meta property="og:image" content="https://exemplo.com/logo.png">
-    <meta property="og:title" content="Provérbios Diários - @washingtonverdan">
-    <meta property="og:description" content="Sabedoria divina renovada diariamente">
-    <title>Provérbios Sagrados - @washingtonverdan</title>
+    <title>Provérbios Diários - @washingtonverdan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2C3E50;
-            --secondary: #3498DB;
-            --accent: #E74C3C;
+            --primary: #2A2A72;
+            --secondary: #009FFD;
+            --accent: #FFD700;
+            --text-dark: #2C3E50;
+            --text-light: #ECF0F1;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Merriweather', serif;
         }
 
         body {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             min-height: 100vh;
-            padding: 20px;
-            color: white;
+            padding: 2rem;
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-light);
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            text-align: center;
+            animation: fadeIn 1s ease-in;
         }
 
         header {
-            padding: 2rem 0;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            margin-bottom: 2rem;
-            animation: aparecer 1s ease-out;
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
 
-        .proverbio-container {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2.5rem;
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
             margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            color: var(--text-dark);
             min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            opacity: 0;
-            animation: aparecer 1s ease-out 0.3s forwards;
-        }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            border: 2px solid rgba(255,255,255,0.2);
         }
 
         .proverbio-texto {
-            font-size: 2rem;
+            font-size: 1.8rem;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            position: relative;
+            quotes: "“" "”";
+        }
+
+        .proverbio-texto::before,
+        .proverbio-texto::after {
+            font-size: 3rem;
+            color: var(--accent);
+            position: absolute;
+            opacity: 0.3;
+        }
+
+        .proverbio-texto::before {
+            content: open-quote;
+            left: -1.5rem;
+            top: -1rem;
+        }
+
+        .proverbio-texto::after {
+            content: close-quote;
+            right: -1.5rem;
+            bottom: -2rem;
         }
 
         .proverbio-referencia {
-            font-size: 1.4rem;
-            opacity: 0.9;
-            font-style: italic;
-            color: #ECF0F1;
-        }
-
-        .botoes {
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: 1fr;
-        }
-
-        button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 1.2rem 2.5rem;
-            border-radius: 50px;
             font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.3s, opacity 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-top: 1.5rem;
+            font-style: italic;
+            text-align: right;
+            color: var(--primary);
+            margin-top: 2rem;
         }
 
         .marca-agua {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            opacity: 0.7;
-            font-size: 1rem;
-            font-family: 'Arial', sans-serif;
+            bottom: 1.5rem;
+            right: 2rem;
+            font-size: 0.9rem;
+            color: rgba(44, 62, 80, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        footer {
-            margin-top: 3rem;
-            padding: 1.5rem;
-            font-size: 1rem;
-            opacity: 0.8;
-            animation: aparecer 1s ease-out 0.6s forwards;
+        .marca-agua img {
+            width: 24px;
+            height: 24px;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 2rem auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .loader {
+            display: none;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .proverbio-texto { font-size: 1.6rem; }
-            .proverbio-referencia { font-size: 1.2rem; }
-            button { padding: 1rem 2rem; }
+            body { padding: 1rem; }
+            .card { padding: 2rem; }
+            .proverbio-texto { font-size: 1.4rem; }
+            h1 { font-size: 2rem; }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📖 Provérbios Diários</h1>
-            <p>Sabedoria divina para cada dia</p>
+            <h1>Sabedoria Diária</h1>
+            <p>Um novo provérbio inspirador a cada dia</p>
         </header>
 
-        <div class="proverbio-container" id="cardProverbio">
-            <div class="proverbio-texto" id="proverbioTexto"></div>
-            <div class="proverbio-referencia" id="proverbioReferencia"></div>
-            <div class="marca-agua">@washingtonverdan</div>
+        <div class="card" id="card">
+            <div class="proverbio-texto" id="texto"></div>
+            <div class="proverbio-referencia" id="referencia"></div>
+            <div class="marca-agua">
+                <span>@washingtonverdan</span>
+            </div>
         </div>
 
-        <div class="botoes">
-            <button onclick="compartilharImagem()" id="btnCompartilhar">
-                ✨ Compartilhar Sabedoria
-            </button>
-        </div>
-
-        <footer>
-            "Porque o Senhor dá a sabedoria; de sua boca procedem o conhecimento e o entendimento" - Provérbios 2:6
-        </footer>
+        <button onclick="compartilharProverbio()">
+            ✨ Compartilhar Sabedoria
+        </button>
+        <div class="loader" id="loader">Gerando imagem...</div>
     </div>
-
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    
     
 <script>
         const proverbios = [
@@ -1072,88 +1100,140 @@
  
 ];        
 
-            function gerarProverbioDoDia() {
-            const dataAtual = new Date();
-            const seed = dataAtual.getFullYear() + dataAtual.getMonth() + dataAtual.getDate();
-            const indice = seed % proverbios.length;
-            const proverbioAtual = proverbios[indice];
-            
-            document.getElementById('proverbioTexto').textContent = proverbioAtual.texto;
-            document.getElementById('proverbioReferencia').textContent = proverbioAtual.referencia;
+            function gerarProverbio() {
+            const data = new Date();
+            const index = (data.getDate() + data.getMonth()) % proverbios.length;
+            document.getElementById('texto').textContent = proverbios[index].texto;
+            document.getElementById('referencia').textContent = proverbios[index].referencia;
         }
 
-        async function compartilharImagem() {
-            const btn = document.getElementById('btnCompartilhar');
-            btn.disabled = true;
-            btn.innerHTML = '🕊️ Gerando imagem...';
+        async function gerarImagem() {
+            const card = document.getElementById('card');
+            const estilo = window.getComputedStyle(card);
+            
+            const htmlContent = `
+                <div style="
+                    padding: 3rem;
+                    background: ${estilo.backgroundColor};
+                    color: ${estilo.color};
+                    font-family: ${estilo.fontFamily};
+                    border-radius: ${estilo.borderRadius};
+                    width: ${card.offsetWidth}px;
+                    min-height: ${card.offsetHeight}px;
+                    position: relative;
+                    box-shadow: ${estilo.boxShadow};
+                    border: ${estilo.border};
+                ">
+                    <div style="
+                        font-size: ${window.getComputedStyle(document.getElementById('texto')).fontSize};
+                        line-height: 1.6;
+                        margin-bottom: 2rem;
+                        position: relative;
+                    ">
+                        <span style="
+                            font-size: 3rem;
+                            color: ${estilo.getPropertyValue('--accent')};
+                            position: absolute;
+                            left: -1.5rem;
+                            top: -1rem;
+                            opacity: 0.3;
+                        ">“</span>
+                        ${card.children[0].innerText}
+                        <span style="
+                            font-size: 3rem;
+                            color: ${estilo.getPropertyValue('--accent')};
+                            position: absolute;
+                            right: -1.5rem;
+                            bottom: -2rem;
+                            opacity: 0.3;
+                        ">”</span>
+                    </div>
+                    <div style="
+                        ${document.getElementById('referencia').style.cssText}
+                        color: ${estilo.getPropertyValue('--primary')};
+                    ">
+                        ${card.children[1].innerText}
+                    </div>
+                    <div style="
+                        ${document.querySelector('.marca-agua').style.cssText}
+                        color: rgba(44, 62, 80, 0.7);
+                    ">
+                        @washingtonverdan<br>
+                        <small>www.sabedoriadiaria.com</small>
+                    </div>
+                </div>
+            `;
 
-            try {
-                const card = document.getElementById('cardProverbio');
-                
-                const options = {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    allowTaint: true,
-                    backgroundColor: null,
-                    foreignObjectRendering: true
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = 'data:image/svg+xml,' + encodeURIComponent(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+                        <foreignObject width="100%" height="100%">
+                            <div xmlns="http://www.w3.org/1999/xhtml" style="
+                                background: linear-gradient(135deg, ${estilo.getPropertyValue('--primary')}, ${estilo.getPropertyValue('--secondary')});
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                padding: 2rem;
+                            ">
+                                ${htmlContent}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `);
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 800;
+                    canvas.height = 600;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    resolve(canvas.toDataURL());
                 };
+            });
+        }
 
-                const canvas = await html2canvas(card, options);
-                
-                canvas.toBlob(async (blob) => {
-                    try {
-                        const file = new File([blob], "proverbio.png", { type: "image/png" });
-                        
-                        if (navigator.share) {
-                            await navigator.share({
-                                files: [file],
-                                title: "Provérbio Diário",
-                                text: document.getElementById('proverbioTexto').textContent
-                            });
-                        } else {
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                const imgUrl = reader.result;
-                                window.location.href = `instagram://library?AssetPath=${encodeURIComponent(imgUrl)}`;
-                            };
-                            reader.readAsDataURL(blob);
-                        }
-                    } catch (error) {
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(blob);
-                        link.download = `proverbio-${new Date().toISOString().split('T')[0]}.png`;
-                        document.body.appendChild(link);
-                        link.click();
-                        setTimeout(() => document.body.removeChild(link), 100);
-                    }
-                }, 'image/png');
+        async function compartilharProverbio() {
+            const loader = document.getElementById('loader');
+            const button = document.querySelector('button');
+            
+            try {
+                loader.style.display = 'block';
+                button.style.display = 'none';
 
+                const imageURL = await gerarImagem();
+
+                if (navigator.share) {
+                    const response = await fetch(imageURL);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'proverbio-diario.png', { type: 'image/png' });
+
+                    await navigator.share({
+                        files: [file],
+                        title: 'Provérbio Diário',
+                        text: 'Compartilhe esta sabedoria:'
+                    });
+                } else {
+                    const link = document.createElement('a');
+                    link.href = imageURL;
+                    link.download = 'proverbio-diario.png';
+                    link.click();
+                }
             } catch (error) {
-                alert('Toque prolongado na imagem para salvar e compartilhar!');
-                console.error('Erro detalhado:', error);
+                console.error('Erro:', error);
+                alert('Toque e segure na imagem para compartilhar!');
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = '✨ Compartilhar Sabedoria';
+                loader.style.display = 'none';
+                button.style.display = 'block';
             }
         }
 
-        function verificarAtualizacaoDiaria() {
-            const agora = new Date();
-            const amanha = new Date(agora);
-            amanha.setDate(agora.getDate() + 1);
-            amanha.setHours(0, 0, 1, 0);
-
-            setTimeout(() => {
-                gerarProverbioDoDia();
-                setInterval(gerarProverbioDoDia, 86400000);
-            }, amanha - agora);
-        }
-
         // Inicialização
-        gerarProverbioDoDia();
-        verificarAtualizacaoDiaria();
-        document.getElementById('btnCompartilhar').addEventListener('touchstart', compartilharImagem);
+        gerarProverbio();
+        setInterval(() => {
+            const agora = new Date();
+            if (agora.getHours() === 0 && agora.getMinutes() === 0) gerarProverbio();
+        }, 60000);
     </script>
 </body>
 </html>
