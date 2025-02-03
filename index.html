@@ -1,89 +1,54 @@
-
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' *.instagram.com; script-src 'self' 'unsafe-inline'">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provérbio Diário - Sabedoria Bíblica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Meta tags essenciais para mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Politica de Segurança (CSP) Flexível -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
+      style-src 'self' 'unsafe-inline'">
+    
+    <!-- Estilos simplificados -->
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
-            background-color: #f5e6d3;
-            margin: 0;
+        body { 
+            font-family: Arial, sans-serif; 
             padding: 20px;
+            background: #f5f5f5;
         }
-        #container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
         }
-        #controls {
-            margin-top: 20px;
+        textarea { 
+            width: 100%; 
+            height: 100px; 
+            padding: 10px; 
+            margin: 10px 0; 
         }
-        button {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #1a252f;
-        }
-        .social-share {
-            margin-top: 20px;
-        }
-        .social-icon {
-            font-size: 24px;
-            margin: 0 10px;
-            color: #2c3e50;
-            text-decoration: none;
+        button { 
+            background: #405DE6; 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            border-radius: 8px; 
+            width: 100%;
         }
     </style>
 </head>
 <body>
-
-<div id="container">
-    <h1>Sabedoria do Dia</h1>
-    <div id="proverbio" class="loading">Carregando sabedoria...</div>
-    <div id="referencia"></div>
-    
-    <div id="controls">
-        <button onclick="handleClick(event, showRandomProverb)">
-            <i class="fas fa-random"></i> Aleatório
-        </button>
-        <button onclick="handleClick(event, saveProverbImage)">
-            <i class="fas fa-download"></i> Salvar
-        </button>
+    <div class="container">
+        <h1>Salvar Provérbio</h1>
+        <textarea id="proverbio" placeholder="Digite seu provérbio..."></textarea>
+        <button id="salvarBtn">Salvar Agora</button>
+        <div id="mensagem"></div>
     </div>
 
-    <div class="social-share">
-        <a href="https://wa.me/5527997566512?text=Sabedoria%20do%20dia" class="social-icon" onclick="openExternalLink(event, this.href)">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="https://www.instagram.com/washingtonverdan" class="social-icon" onclick="openExternalLink(event, this.href)">
-            <i class="fab fa-instagram"></i>
-        </a>
-    </div>
-
-    <div id="data"></div>
-</div>
-
-<!-- Canvas para gerar a imagem -->
-<canvas id="hiddenCanvas"></canvas>
-
-    <script>
-
+    <!-- Script de debug (remover em produção) -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+<script>
         const proverbios = [
         { texto: "Provérbios de Salomão, filho de Davi, rei de Israel.", referencia: "Provérbios 1:1" },
   { texto: "Para adquirir a sabedoria e a instrução; para compreender as palavras da prudência.", referencia: "Provérbios 1:2" },
@@ -1003,144 +968,51 @@
  
 ];        
 
-function getRandomIndex() {
-    return Math.floor(Math.random() * proverbios.length);
-}
+const inputProverbio = document.getElementById('proverbio');
+        const btnSalvar = document.getElementById('salvarBtn');
+        const divMensagem = document.getElementById('mensagem');
 
-function updateProverbio(index) {
-    const proverbio = proverbios[index];
-    document.getElementById('proverbio').textContent = `“${proverbio.texto}”`;
-    document.getElementById('referencia').textContent = proverbio.referencia;
-}
-
-function showRandomProverb() {
-    const randomIndex = getRandomIndex();
-    updateProverbio(randomIndex);
-}
-
-async function generateProverbImage() {
-    const canvas = document.getElementById('hiddenCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // Configurações do canvas
-    canvas.width = 800;
-    canvas.height = 800;
-    
-    // Fundo
-    ctx.fillStyle = '#f5e6d3';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Estilo do texto
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#2c3e50';
-    
-    // Texto do provérbio
-    const proverbio = document.getElementById('proverbio').textContent;
-    ctx.font = '30px "Playfair Display"';
-    wrapText(ctx, proverbio, 400, 300, 600, 40);
-    
-    // Referência
-    ctx.font = 'italic 25px "Roboto"';
-    ctx.fillText(document.getElementById('referencia').textContent, 400, 500);
-    
-    // Marca d'água
-    ctx.fillStyle = 'rgba(44, 62, 80, 0.2)';
-    ctx.font = '40px "Playfair Display"';
-    ctx.fillText('Sabedoria do Dia', 400, 700);
-    
-    return await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
-}
-
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
-    const words = text.split(' ');
-    let line = '';
-    let lines = [];
-
-    for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = context.measureText(testLine);
-        const testWidth = metrics.width;
-        
-        if (testWidth > maxWidth && n > 0) {
-            lines.push(line);
-            line = words[n] + ' ';
-        } else {
-            line = testLine;
+        // Função para mostrar mensagens
+        function mostrarMensagem(texto, cor = 'green') {
+            divMensagem.style.color = cor;
+            divMensagem.textContent = texto;
+            setTimeout(() => { divMensagem.textContent = ''; }, 3000);
         }
-    }
-    lines.push(line);
 
-    for (let i = 0; i < lines.length; i++) {
-        context.fillText(lines[i], x, y + (i * lineHeight));
-    }
-}
+        // Função de salvamento
+        function salvarProverbio() {
+            const texto = inputProverbio.value.trim();
+            
+            if (!texto) {
+                mostrarMensagem('Digite um provérbio antes de salvar!', 'red');
+                return;
+            }
 
-async function saveProverbImage() {
-    try {
-        const imageFile = await generateProverbImage();
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(imageFile);
-        link.download = 'sabedoria-do-dia.jpg';
-        link.click();
-    } catch (error) {
-        console.log('Erro ao salvar a imagem:', error);
-    }
-}
+            // Salvamento LOCAL (sessionStorage)
+            try {
+                sessionStorage.setItem('proverbioSalvo', texto);
+                mostrarMensagem('Provérbio salvo temporariamente!');
+            } catch (e) {
+                mostrarMensagem('Erro ao salvar localmente!', 'red');
+            }
 
-function updateDateTime() {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const dateTime = new Date().toLocaleDateString('pt-BR', options);
-    document.getElementById('data').textContent = dateTime;
-}
-
-// Forçar abertura de links no navegador externo (corrige bloqueio do Instagram)
-function openExternalLink(event, url) {
-    event.preventDefault();
-    window.open(url, '_system');
-}
-
-// Corrigir botões para funcionar no Instagram
-function handleClick(event) {
-    event.preventDefault();
-    let button = event.currentTarget;
-
-    if (button.getAttribute('onclick')) {
-        let functionName = button.getAttribute('onclick').replace('()', '');
-        if (typeof window[functionName] === 'function') {
-            window[functionName]();
+            // Opcional: Envio para servidor (requer CORS)
+            // fetch('https://seuservidor.com/salvar', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ texto })
+            // }).catch(() => {});
         }
-    }
-}
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    updateProverbio(getRandomIndex());
-    updateDateTime();
-    
-    // Atualizar diariamente às 00:00 sem usar reload
-    const now = new Date();
-    const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const msToMidnight = night - now;
-    
-    setTimeout(() => {
-        window.location.href = window.location.href; // Evita bloqueio do Instagram
-    }, msToMidnight);
+        // Eventos compatíveis com WebView
+        btnSalvar.addEventListener('click', salvarProverbio);
+        btnSalvar.addEventListener('touchstart', salvarProverbio);
 
-    // Atualizar data a cada minuto
-    setInterval(updateDateTime, 60000);
-});
-
-// Adicionar eventos para todos os botões corrigindo o erro do Instagram
-document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', handleClick);
-    button.addEventListener('touchstart', handleClick);
-});
-
-// Atalho para espaço (teclado)
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') showRandomProverb();
-});
+        // Carregar provérbio salvo ao iniciar
+        window.addEventListener('load', () => {
+            const salvo = sessionStorage.getItem('proverbioSalvo');
+            if (salvo) inputProverbio.value = salvo;
+        });
     </script>
 </body>
 </html>
