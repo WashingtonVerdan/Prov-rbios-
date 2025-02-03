@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:">
+    <meta property="og:image" content="https://exemplo.com/logo.png">
+    <meta property="og:title" content="Provérbios Diários - @washingtonverdan">
+    <meta property="og:description" content="Sabedoria divina renovada diariamente">
     <title>Provérbios Sagrados - @washingtonverdan</title>
     <style>
         :root {
@@ -36,6 +39,7 @@
             padding: 2rem 0;
             border-bottom: 2px solid rgba(255,255,255,0.1);
             margin-bottom: 2rem;
+            animation: aparecer 1s ease-out;
         }
 
         .proverbio-container {
@@ -50,6 +54,13 @@
             justify-content: center;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: aparecer 1s ease-out 0.3s forwards;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .proverbio-texto {
@@ -103,14 +114,15 @@
             padding: 1.5rem;
             font-size: 1rem;
             opacity: 0.8;
+            animation: aparecer 1s ease-out 0.6s forwards;
         }
 
         @media (max-width: 768px) {
             .proverbio-texto { font-size: 1.6rem; }
             .proverbio-referencia { font-size: 1.2rem; }
+            button { padding: 1rem 2rem; }
         }
     </style>
-    <!-- Carrega a fonte Merriweather -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -138,8 +150,6 @@
     </div>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
     
     
 <script>
@@ -1070,38 +1080,58 @@
             
             document.getElementById('proverbioTexto').textContent = proverbioAtual.texto;
             document.getElementById('proverbioReferencia').textContent = proverbioAtual.referencia;
-            document.getElementById('dataAtualizacao').textContent = dataAtual.toLocaleDateString();
         }
 
         async function compartilharImagem() {
             const btn = document.getElementById('btnCompartilhar');
             btn.disabled = true;
-            btn.innerHTML = '🕊️ Gerando bênção...';
+            btn.innerHTML = '🕊️ Gerando imagem...';
 
             try {
                 const card = document.getElementById('cardProverbio');
                 
                 const options = {
-                    scale: 3,
+                    scale: 2,
                     useCORS: true,
+                    logging: false,
+                    allowTaint: true,
                     backgroundColor: null,
-                    logging: true
+                    foreignObjectRendering: true
                 };
 
                 const canvas = await html2canvas(card, options);
-                const imagem = canvas.toDataURL('image/png');
-
-                // Forçar download no Instagram
-                const link = document.createElement('a');
-                link.download = `proverbio-${new Date().toISOString().split('T')[0]}.png`;
-                link.href = imagem;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                
+                canvas.toBlob(async (blob) => {
+                    try {
+                        const file = new File([blob], "proverbio.png", { type: "image/png" });
+                        
+                        if (navigator.share) {
+                            await navigator.share({
+                                files: [file],
+                                title: "Provérbio Diário",
+                                text: document.getElementById('proverbioTexto').textContent
+                            });
+                        } else {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                const imgUrl = reader.result;
+                                window.location.href = `instagram://library?AssetPath=${encodeURIComponent(imgUrl)}`;
+                            };
+                            reader.readAsDataURL(blob);
+                        }
+                    } catch (error) {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `proverbio-${new Date().toISOString().split('T')[0]}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        setTimeout(() => document.body.removeChild(link), 100);
+                    }
+                }, 'image/png');
 
             } catch (error) {
-                alert('Deus está refinando nosso código! Tente novamente.');
-                console.error(error);
+                alert('Toque prolongado na imagem para salvar e compartilhar!');
+                console.error('Erro detalhado:', error);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '✨ Compartilhar Sabedoria';
