@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,165 +7,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provérbio Diário - Sabedoria Bíblica</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-        /* Mantendo o estilo anterior */
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #e67e22;
-            --background-color: #f8f9fa;
-        }
-
         body {
             font-family: 'Roboto', sans-serif;
-            min-height: 100vh;
+            text-align: center;
+            background-color: #f5e6d3;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
-                        url('https://images.unsplash.com/photo-1532012197267-da3d6c3ccea4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
         }
-
         #container {
-            max-width: 800px;
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            margin: 20px;
-            position: relative;
-            transition: transform 0.3s ease;
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            border-bottom: 2px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-
-        #proverbio {
-            font-size: 1.8em;
-            line-height: 1.6;
-            color: var(--primary-color);
-            margin: 30px 0;
-            min-height: 120px;
-            opacity: 0;
-            animation: fadeIn 1s ease-in forwards;
-        }
-
-        #referencia {
-            font-style: italic;
-            color: var(--secondary-color);
-            font-size: 1.2em;
-            margin: 20px 0;
-        }
-
         #controls {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            margin-top: 20px;
         }
-
         button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            background: var(--secondary-color);
+            background-color: #2c3e50;
             color: white;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 5px;
         }
-
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(230,126,34,0.4);
+            background-color: #1a252f;
         }
-
-        #data {
-            color: #666;
-            margin-top: 25px;
-            font-size: 0.9em;
-        }
-
         .social-share {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
+            margin-top: 20px;
         }
-
         .social-icon {
             font-size: 24px;
-            color: var(--primary-color);
-            transition: transform 0.3s ease;
-        }
-
-        .social-icon:hover {
-            transform: scale(1.2);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .loading {
-            font-size: 1.5em;
-            color: var(--secondary-color);
-        }
-
-        /* Canvas escondido para gerar a imagem */
-        #hiddenCanvas {
-            display: none;
+            margin: 0 10px;
+            color: #2c3e50;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <h1>Sabedoria do Dia</h1>
-        <div id="proverbio" class="loading">Carregando sabedoria...</div>
-        <div id="referencia"></div>
-        
-        <div id="controls">
-            <button onclick="showRandomProverb()">
-                <i class="fas fa-random"></i>
-                Aleatório
-            </button>
-            <button onclick="saveProverbImage()">
-    <i class="fas fa-download"></i>
-    Salvar
-</button>
-        </div>
 
-        <div class="social-share">
-            <a href="https://wa.me/5527997566512?text=Sabedoria%20do%20dia" class="social-icon" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-            <a href="https://www.instagram.com/washingtonverdan" class="social-icon" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-
-        <div id="data"></div>
+<div id="container">
+    <h1>Sabedoria do Dia</h1>
+    <div id="proverbio" class="loading">Carregando sabedoria...</div>
+    <div id="referencia"></div>
+    
+    <div id="controls">
+        <button onclick="handleClick(event, showRandomProverb)">
+            <i class="fas fa-random"></i> Aleatório
+        </button>
+        <button onclick="handleClick(event, saveProverbImage)">
+            <i class="fas fa-download"></i> Salvar
+        </button>
     </div>
 
-    <!-- Canvas para gerar a imagem -->
-    <canvas id="hiddenCanvas"></canvas>
+    <div class="social-share">
+        <a href="https://wa.me/5527997566512?text=Sabedoria%20do%20dia" class="social-icon" onclick="openExternalLink(event, this.href)">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/washingtonverdan" class="social-icon" onclick="openExternalLink(event, this.href)">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+
+    <div id="data"></div>
+</div>
+
+<!-- Canvas para gerar a imagem -->
+<canvas id="hiddenCanvas"></canvas>
 
     <script>
 
