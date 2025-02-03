@@ -1,181 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob: https://*">
-    <title>Provérbios Diários - @washingtonverdan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2A2A72;
-            --secondary: #009FFD;
-            --accent: #FFD700;
-            --text-dark: #2C3E50;
-            --text-light: #ECF0F1;
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            min-height: 100vh;
-            padding: 2rem;
-            font-family: 'Open Sans', sans-serif;
-            color: var(--text-light);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease-in;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--accent);
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            color: var(--text-dark);
-            min-height: 300px;
-            position: relative;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-
-        .proverbio-texto {
-            font-size: 1.8rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            position: relative;
-            quotes: "“" "”";
-        }
-
-        .proverbio-texto::before,
-        .proverbio-texto::after {
-            font-size: 3rem;
-            color: var(--accent);
-            position: absolute;
-            opacity: 0.3;
-        }
-
-        .proverbio-texto::before {
-            content: open-quote;
-            left: -1.5rem;
-            top: -1rem;
-        }
-
-        .proverbio-texto::after {
-            content: close-quote;
-            right: -1.5rem;
-            bottom: -2rem;
-        }
-
-        .proverbio-referencia {
-            font-size: 1.2rem;
-            font-style: italic;
-            text-align: right;
-            color: var(--primary);
-        }
-
-        .marca-agua {
-            position: absolute;
-            bottom: 1.5rem;
-            right: 2rem;
-            font-size: 0.9rem;
-            color: rgba(44, 62, 80, 0.7);
-        }
-
-        button {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 1.2rem 3rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 2rem auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        .alert {
-            padding: 15px;
-            margin: 20px;
-            border-radius: 10px;
-            display: none;
-            text-align: center;
-        }
-
-        .alert.error {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .alert.success {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            .card { padding: 2rem; }
-            .proverbio-texto { font-size: 1.4rem; }
-            h1 { font-size: 2rem; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Sabedoria Diária</h1>
-            <p>Um novo provérbio inspirador a cada dia</p>
-        </header>
-
-        <div class="card" id="card">
-            <div class="proverbio-texto" id="texto"></div>
-            <div class="proverbio-referencia" id="referencia"></div>
-            <div class="marca-agua">@washingtonverdan</div>
-        </div>
-
-        <button onclick="compartilharProverbio()">✨ Compartilhar Sabedoria</button>
-        <div class="alert" id="alert"></div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
         
         const proverbios = [
         { texto: "Provérbios de Salomão, filho de Davi, rei de Israel.", referencia: "Provérbios 1:1" },
@@ -1094,140 +917,63 @@
     { "texto": "A beleza é enganosa, e a formosura é passageira; mas a mulher que teme ao Senhor será elogiada.", "referencia": "Provérbios 31:30" },
     { "texto": "Que ela receba a recompensa merecida, e as suas obras sejam elogiadas à porta da cidade.", "referencia": "Provérbios 31:31" },
  
-];        
+];    
 
-            // Funções principais
-        function gerarProverbio() {
-            const data = new Date();
-            const index = (data.getDate() + data.getMonth()) % proverbios.length;
-            document.getElementById('texto').textContent = proverbios[index].texto;
-            document.getElementById('referencia').textContent = proverbios[index].referencia;
-        }
+                        
 
+function getDailyProverbio() {
+    const today = new Date().toISOString().slice(0, 10);
+    const stored = localStorage.getItem('dailyProverbio');
+    
+    if (stored && stored.startsWith(today)) {
+        return JSON.parse(stored.split('|')[1]);
+    }
+
+    const randomIndex = Math.floor(Math.random() * proverbios.length);
+    const selected = proverbios[randomIndex];
+    localStorage.setItem('dailyProverbio', `${today}|${JSON.stringify(selected)}`);
+    return selected;
+}
+
+function updateProverbio() {
+    const {texto, referencia} = getDailyProverbio();
+    document.getElementById('proverbioTexto').textContent = texto;
+    document.getElementById('proverbioReferencia').textContent = referencia;
+}
+
+async function shareProverbio() {
+    try {
+        const container = document.getElementById('proverbioContainer');
         
-    // Configurações otimizadas para Instagram
-    const isInstagram = () => /Instagram/.test(navigator.userAgent);
-    const instagramScheme = 'instagram-stories://share';
-
-    // Gerar imagem otimizada
-    async function generateImage() {
-        const card = document.getElementById('card');
-        return await html2canvas(card, {
+        const canvas = await html2canvas(container, {
             useCORS: true,
             scale: 2,
-            logging: false,
-            backgroundColor: null,
-            onclone: (clonedDoc) => {
-                clonedDoc.getElementById('alert').style.display = 'none';
-            }
+            backgroundColor: null
         });
-    }
 
-    // Fluxo específico para Instagram
-    async function shareToInstagram(blob) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (isInstagram()) {
-                    // Método 1: Tenta abrir diretamente o app
-                    window.location.href = `${instagramScheme}?background=${encodeURIComponent(reader.result)}`;
-                    
-                    // Método 2: Fallback para navegador
-                    setTimeout(() => {
-                        const link = document.createElement('a');
-                        link.href = reader.result;
-                        link.download = 'proverbio-diario.png';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        reject('Método direto falhou. Imagem baixada!');
-                    }, 800);
-                }
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], 'proverbio-diario.png', {type: 'image/png'});
+            const shareData = {
+                files: [file],
+                title: 'Provérbio Diário',
+                text: 'Confira o provérbio de hoje!'
             };
-            reader.readAsDataURL(blob);
-        });
-    }
 
-    // Função principal atualizada
-    async function compartilharProverbio() {
-        const button = document.querySelector('button');
-        try {
-            button.disabled = true;
-            button.innerHTML = '📸 Gerando...';
-            
-            const canvas = await generateImage();
-            const blob = await canvasToBlob(canvas);
-
-            if (isInstagram()) {
-                await shareToInstagram(blob);
-                showAlert('Abra o Instagram para postar!', 'success');
-            } else if (navigator.share) {
-                const file = new File([blob], 'proverbio.png', { type: 'image/png' });
-                await navigator.share({ files: [file] });
+            if (navigator.canShare && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
             } else {
-                forceDownload(blob);
-                showAlert('✅ Imagem salva! Compartilhe manualmente', 'success');
-            }
-        } catch (error) {
-            console.error('Erro:', error);
-            showAlert('📲 Toque e segure na imagem para salvar', 'error');
-        } finally {
-            button.disabled = false;
-            button.innerHTML = '✨ Compartilhar';
-        }
-    }
-
-    // Auto-iniciação quando aberto no Instagram
-    if (isInstagram()) {
-        window.addEventListener('load', async () => {
-            try {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                await compartilharProverbio();
-            } catch (error) {
-                showAlert('Toque no botão para gerar a imagem', 'error');
+                const link = document.createElement('a');
+                link.download = 'proverbio-diario.png';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                alert('Imagem baixada! Agora você pode compartilhar pelo Instagram.');
             }
         });
+    } catch (err) {
+        console.error('Erro ao compartilhar:', err);
+        alert('Erro ao compartilhar. Tente novamente mais tarde.');
     }
+}
 
-
-            
-
-        // Funções auxiliares
-        function showAlert(message, type) {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.className = `alert ${type}`;
-            alert.style.display = 'block';
-        }
-
-        function forceDownload(blob) {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `proverbio-${new Date().toISOString().split('T')[0]}.png`;
-            document.body.appendChild(link);
-            link.click();
-            setTimeout(() => {
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }, 100);
-        }
-
-        async function canvasToBlob(canvas) {
-            return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-        }
-
-        // Inicialização
-        gerarProverbio();
-        setInterval(() => {
-            const agora = new Date();
-            if (agora.getHours() === 0 && agora.getMinutes() === 0) {
-                gerarProverbio();
-            }
-        }, 60000);
-
-        // Evento de toque para Instagram
-        document.querySelector('button').addEventListener('touchstart', compartilharProverbio);
-    </script>
-</body>
-</html>
+document.getElementById('shareButton').addEventListener('click', shareProverbio);
+updateProverbio();
