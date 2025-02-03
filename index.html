@@ -1104,81 +1104,93 @@
             document.getElementById('referencia').textContent = proverbios[index].referencia;
         }
 
-        async function compartilharProverbio() {
-    const alert = document.getElementById('alert');
-    const button = document.querySelector('button');
-    
-    try {
-        alert.style.display = 'none';
-        button.disabled = true;
-        button.innerHTML = '⏳ Gerando imagem...';
+        
+    // Configurações otimizadas para Instagram
+    const isInstagram = () => /Instagram/.test(navigator.userAgent);
+    const instagramScheme = 'instagram-stories://share';
 
+    // Gerar imagem otimizada
+    async function generateImage() {
         const card = document.getElementById('card');
-        const canvas = await html2canvas(card, {
+        return await html2canvas(card, {
             useCORS: true,
-            allowTaint: false,
             scale: 2,
             logging: false,
-            backgroundColor: null
+            backgroundColor: null,
+            onclone: (clonedDoc) => {
+                clonedDoc.getElementById('alert').style.display = 'none';
+            }
         });
+    }
 
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-
-        // Detecção melhorada do Instagram
-        const isInstagram = /Instagram/i.test(navigator.userAgent);
-        
-        if (isInstagram) {
-            // Método otimizado para Instagram
+    // Fluxo específico para Instagram
+    async function shareToInstagram(blob) {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-                // Tenta abrir diretamente o app
-                window.location.href = `instagram://create/story?backgroundImage=${encodeURIComponent(reader.result)}`;
-                
-                // Fallback para navegador interno
-                setTimeout(() => {
-                    window.open(`intent://create/story?background=${encodeURIComponent(reader.result)}#Intent;package=com.instagram.android;scheme=https;end`);
-                }, 300);
+                if (isInstagram()) {
+                    // Método 1: Tenta abrir diretamente o app
+                    window.location.href = `${instagramScheme}?background=${encodeURIComponent(reader.result)}`;
+                    
+                    // Método 2: Fallback para navegador
+                    setTimeout(() => {
+                        const link = document.createElement('a');
+                        link.href = reader.result;
+                        link.download = 'proverbio-diario.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        reject('Método direto falhou. Imagem baixada!');
+                    }, 800);
+                }
             };
             reader.readAsDataURL(blob);
+        });
+    }
+
+    // Função principal atualizada
+    async function compartilharProverbio() {
+        const button = document.querySelector('button');
+        try {
+            button.disabled = true;
+            button.innerHTML = '📸 Gerando...';
             
-        } else if (navigator.share) {
-            // Compartilhamento nativo para outros dispositivos
-            const file = new File([blob], 'proverbio.png', { type: 'image/png' });
-            await navigator.share({
-                files: [file],
-                title: 'Provérbio Diário',
-                text: 'Compartilhe esta sabedoria:'
-            });
-            showAlert('Compartilhado com sucesso!', 'success');
-        } else {
-            // Fallback genérico
-            forceDownload(blob);
-            showAlert('📸 Imagem salva! Agora compartilhe do seu app de fotos', 'success');
+            const canvas = await generateImage();
+            const blob = await canvasToBlob(canvas);
+
+            if (isInstagram()) {
+                await shareToInstagram(blob);
+                showAlert('Abra o Instagram para postar!', 'success');
+            } else if (navigator.share) {
+                const file = new File([blob], 'proverbio.png', { type: 'image/png' });
+                await navigator.share({ files: [file] });
+            } else {
+                forceDownload(blob);
+                showAlert('✅ Imagem salva! Compartilhe manualmente', 'success');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            showAlert('📲 Toque e segure na imagem para salvar', 'error');
+        } finally {
+            button.disabled = false;
+            button.innerHTML = '✨ Compartilhar';
         }
-
-    } catch (error) {
-        console.error('Erro:', error);
-        showAlert('✅ Imagem pronta! Toque e segure para salvar e compartilhar', 'error');
-        forceDownload(await canvasToBlob(canvas));
-    } finally {
-        button.disabled = false;
-        button.innerHTML = '✨ Compartilhar Sabedoria';
     }
-}
 
-// Adicionar detecção automática ao carregar a página
-window.addEventListener('load', () => {
-    if (/Instagram/i.test(navigator.userAgent)) {
-        showAlert('Toque no botão abaixo para gerar e compartilhar diretamente!', 'success');
-        
-        // Forçar download automático se possível
-        setTimeout(() => {
-            compartilharProverbio().catch(() => {
-                showAlert('Toque no botão "Compartilhar Sabedoria" para gerar a imagem', 'error');
-            });
-        }, 2000);
+    // Auto-iniciação quando aberto no Instagram
+    if (isInstagram()) {
+        window.addEventListener('load', async () => {
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                await compartilharProverbio();
+            } catch (error) {
+                showAlert('Toque no botão para gerar a imagem', 'error');
+            }
+        });
     }
-});
+
+
+            
 
         // Funções auxiliares
         function showAlert(message, type) {
