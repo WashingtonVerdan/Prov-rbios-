@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Provérbio Diário - @washingtonverdan">
+    <meta property="og:description" content="Receba seu provérbio bíblico diário e compartilhe sabedoria!">
+    <title>Provérbio Diário - @washingtonverdan</title>
+    
+    <!-- Fontes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Merriweather&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cor-primaria: #8b4513;
+            --cor-secundaria: #6b3410;
+            --cor-fundo: #f0e6d3;
+            --cor-texto: #333;
+            --sombra: 0 0 20px rgba(0, 0, 0, 0.1);
+            --borda-radius: 10px;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--cor-fundo);
+            font-family: 'Merriweather', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg==');
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .proverbio-box {
+            background: #fff5e6;
+            padding: 30px;
+            border-radius: var(--borda-radius);
+            box-shadow: var(--sombra);
+            position: relative;
+            border: 2px solid var(--cor-primaria);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .proverbio-box:hover {
+            transform: translateY(-3px);
+        }
+
+        .biblia-header {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.8rem;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--cor-primaria);
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        #proverbioTexto {
+            font-size: 1.4rem;
+            color: var(--cor-texto);
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        .reference {
+            font-style: italic;
+            color: #666;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(139, 69, 19, 0.3);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+
+        button {
+            background: var(--cor-primaria);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--cor-secundaria);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .proverbio-box { padding: 20px; }
+            #proverbioTexto { font-size: 1.2rem; }
+            .biblia-header { font-size: 1.6rem; }
+            button { padding: 12px 24px; font-size: 1rem; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="proverbio-box" id="proverbioContainer">
+            <div class="biblia-header">Livro dos Provérbios</div>
+            <p id="proverbioTexto">Carregando provérbio do dia...</p>
+            <div class="reference" id="proverbioReferencia"></div>
+            <div class="watermark">@washingtonverdan</div>
+        </div>
+        <button id="shareButton">📸 Compartilhar Provérbio</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        // Lista de Provérbios (adicione todos os versículos)
+        const proverbios = [
+            {
+                texto: "O temor do Senhor é o princípio do conhecimento, mas os insensatos desprezam a sabedoria e a disciplina.",
+                referencia: "Provérbios 1:7"
+            },
+            {
+                texto: "Pois o Senhor dá a sabedoria; de sua boca procedem o conhecimento e o entendimento.",
+                referencia: "Provérbios 2:6"
+            },
+            // Adicione todos os demais provérbios aqui...
+        ];
+
+        // Sistema de Data
+        function getTodayKey() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
+        // Gerenciamento diário
+        function getDailyProverbio() {
+            const today = getTodayKey();
+            const stored = localStorage.getItem('dailyProverbio');
+            
+            if (stored && stored.startsWith(today)) {
+                return JSON.parse(stored.split('|')[1]);
+            }
+
+            const randomIndex = Math.floor(Math.random() * proverbios.length);
+            const selected = proverbios[randomIndex];
+            localStorage.setItem('dailyProverbio', `${today}|${JSON.stringify(selected)}`);
+            return selected;
+        }
+
+        // Atualizar interface
+        function updateProverbio() {
+            const {texto, referencia} = getDailyProverbio();
+            document.getElementById('proverbioTexto').textContent = texto;
+            document.getElementById('proverbioReferencia').textContent = referencia;
+        }
+
+        // Compartilhamento
+        async function shareProverbio() {
+            try {
+                if (navigator.userAgent.includes('Instagram')) {
+                    alert('Abra no navegador do seu celular para compartilhar!');
+                    return;
+                }
+
+                const container = document.getElementById('proverbioContainer');
+                const canvas = await html2canvas(container, { scale: 2 });
+                
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], 'proverbio-diario.png', {type: 'image/png'});
+                    
+                    if (navigator.canShare?.({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Provérbio Diário',
+                            text: '🌟 Confira o provérbio de hoje!'
+                        });
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = 'proverbio-diario.png';
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        alert('Imagem salva! Agora você pode compartilhar pelo Instagram.');
+                    }
+                });
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao compartilhar. Tente novamente mais tarde.');
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProverbio();
+            document.getElementById('shareButton').addEventListener('click', shareProverbio);
+        });
+    </script>
+</body>
+</html>
