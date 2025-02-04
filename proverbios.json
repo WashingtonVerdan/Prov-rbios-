@@ -1,31 +1,11 @@
-{
-  "livro": "Provérbios",
-  "capitulos": [
+[
     {
-      "capitulo": 1,
-      "versiculos": [
-        {
-          "versiculo": 1,
-          "texto": "Provérbios de Salomão, filho de Davi, rei de Israel..."
-        },
-        {
-          "versiculo": 2,
-          "texto": "Para conhecer a sabedoria e a instrução..."
-        }
-      ]
+        "texto": "O temor do SENHOR é o princípio do conhecimento; os loucos desprezam a sabedoria e a instrução.",
+        "referencia": "Provérbios 1:7"
     },
     {
-      "capitulo": 31,
-      "versiculos": [
-        {
-          "versiculo": 10,
-          "texto": "Mulher virtuosa, quem a achará?..."
-        },
-        {
-          "versiculo": 31,
-          "texto": "Dai-lhe do fruto das suas mãos..."
-        }
-      ]
-    }
-  ]
-}
+        "texto": "Porque o SENHOR dá a sabedoria; de sua boca procedem o conhecimento e o entendimento.",
+        "referencia": "Provérbios 2:6"
+    },
+    // ... mais provérbios
+]
