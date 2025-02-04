@@ -125,36 +125,54 @@
         <button id="shareButton">📸 Compartilhar Provérbio</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    
-       <script>
+
+    <script>
 document.addEventListener('DOMContentLoaded', () => {
     const proverbioTexto = document.getElementById('proverbioTexto');
     const proverbioReferencia = document.getElementById('proverbioReferencia');
 
-    function getDailyProverb() {
-        // Usa a data atual como semente para o número aleatório
-        const today = new Date();
-        const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    async function loadProverbio() {
+        try {
+            // 1. Carrega o JSON
+            const response = await fetch('./proverbios.json');
+            if (!response.ok) throw new Error('Erro ao carregar arquivo');
+            
+            // 2. Processa os dados
+            const proverbios = await response.json();
+            if (!proverbios.length) throw new Error('JSON vazio ou inválido');
+
+            // 3. Gera índice diário fixo
+            const today = new Date();
+            const seed = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+            const index = Math.abs(seed) % proverbios.length;
+
+            // 4. Exibe na tela
+            proverbioTexto.textContent = proverbios[index].texto;
+            proverbioReferencia.textContent = proverbios[index].referencia;
+
+        } catch (error) {
+            console.error('Erro:', error);
+            proverbioTexto.textContent = 'Erro ao carregar o provérbio.';
+            proverbioReferencia.textContent = '';
+        }
+// Dentro da função loadProverbio:
+const response = await fetch('./proverbios.json');
+const data = await response.json();
+
+// Achata todos os versículos em um array único
+const allVersiculos = data.capitulos.flatMap(capitulo => 
+    capitulo.versiculos.map(versiculo => ({
+        texto: versiculo.texto,
+        referencia: `Provérbios ${capitulo.capitulo}:${versiculo.versiculo}`
+    }))
+);
+
+// Resto do código mantido, usando allVersiculos
         
-        fetch('proverbios.json')
-            .then(response => response.json())
-            .then(data => {
-                // Gera índice baseado na data atual
-                const index = Math.floor(seed % data.length);
-                const dailyProverb = data[index];
-                
-                proverbioTexto.textContent = dailyProverb.texto;
-                proverbioReferencia.textContent = dailyProverb.referencia;
-            })
-            .catch(error => {
-                console.error('Erro ao carregar provérbios:', error);
-                proverbioTexto.textContent = 'Erro ao carregar o provérbio do dia.';
-            });
     }
 
-    // Compartilhar como imagem
+    // Compartilhamento (mantido igual)
     document.getElementById('shareButton').addEventListener('click', () => {
         html2canvas(document.querySelector("#proverbioContainer")).then(canvas => {
             const image = canvas.toDataURL("image/png");
@@ -165,9 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    getDailyProverb();
+    loadProverbio();
 });
-       
-</script>
+
+        
+                </script>
 </body>
 </html>
