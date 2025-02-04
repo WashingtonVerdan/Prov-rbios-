@@ -1,5 +1,5 @@
 
-        
+       <script>
         const proverbios = [
         { texto: "Provérbios de Salomão, filho de Davi, rei de Israel.", referencia: "Provérbios 1:1" },
   { texto: "Para adquirir a sabedoria e a instrução; para compreender as palavras da prudência.", referencia: "Provérbios 1:2" },
@@ -993,3 +993,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProverbio();
     document.getElementById('shareButton').addEventListener('click', shareProverbio);
 });
+</script>
