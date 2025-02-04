@@ -129,32 +129,45 @@
     
     
        <script>
-         document.addEventListener('DOMContentLoaded', () => {
-    fetch('caminho/para/proverbios.json') // Ajuste o caminho conforme sua estrutura
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao carregar o arquivo JSON');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const container = document.getElementById('proverbios-container');
-            data.capitulos.forEach(capitulo => {
-                const capDiv = document.createElement('div');
-                capDiv.innerHTML = `<h2>Capítulo ${capitulo.capitulo}</h2>`;
-                capitulo.versiculos.forEach(versiculo => {
-                    const versiculoP = document.createElement('p');
-                    versiculoP.innerHTML = `<strong>${versiculo.versiculo}:</strong> ${versiculo.texto}`;
-                    capDiv.appendChild(versiculoP);
-                });
-                container.appendChild(capDiv);
+document.addEventListener('DOMContentLoaded', () => {
+    const proverbioTexto = document.getElementById('proverbioTexto');
+    const proverbioReferencia = document.getElementById('proverbioReferencia');
+
+    function getDailyProverb() {
+        // Usa a data atual como semente para o número aleatório
+        const today = new Date();
+        const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        
+        fetch('proverbios.json')
+            .then(response => response.json())
+            .then(data => {
+                // Gera índice baseado na data atual
+                const index = Math.floor(seed % data.length);
+                const dailyProverb = data[index];
+                
+                proverbioTexto.textContent = dailyProverb.texto;
+                proverbioReferencia.textContent = dailyProverb.referencia;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar provérbios:', error);
+                proverbioTexto.textContent = 'Erro ao carregar o provérbio do dia.';
             });
-        })
-        .catch(error => {
-            console.error('Erro:', error);
+    }
+
+    // Compartilhar como imagem
+    document.getElementById('shareButton').addEventListener('click', () => {
+        html2canvas(document.querySelector("#proverbioContainer")).then(canvas => {
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.download = 'proverbio-do-dia.png';
+            link.href = image;
+            link.click();
         });
+    });
+
+    getDailyProverb();
 });
-```
+       
 </script>
 </body>
 </html>
