@@ -1,1 +1,31 @@
-
+{
+  "livro": "Provérbios",
+  "capitulos": [
+    {
+      "capitulo": 1,
+      "versiculos": [
+        {
+          "versiculo": 1,
+          "texto": "Provérbios de Salomão, filho de Davi, rei de Israel..."
+        },
+        {
+          "versiculo": 2,
+          "texto": "Para conhecer a sabedoria e a instrução..."
+        }
+      ]
+    },
+    {
+      "capitulo": 31,
+      "versiculos": [
+        {
+          "versiculo": 10,
+          "texto": "Mulher virtuosa, quem a achará?..."
+        },
+        {
+          "versiculo": 31,
+          "texto": "Dai-lhe do fruto das suas mãos..."
+        }
+      ]
+    }
+  ]
+}
