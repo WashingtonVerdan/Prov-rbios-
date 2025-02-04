@@ -1,192 +1,128 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Provérbio Diário - @washingtonverdan">
-    <meta property="og:description" content="Receba seu provérbio bíblico diário e compartilhe sabedoria!">
-    <title>Provérbio Diário - @washingtonverdan</title>
-    
-    <!-- Fontes Google -->
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Merriweather&display=swap" rel="stylesheet">
-    
+    <title>Vale Mais: Gasolina ou Etanol?</title>
     <style>
-        :root {
-            --cor-primaria: #8b4513;
-            --cor-secundaria: #6b3410;
-            --cor-fundo: #f0e6d3;
-            --cor-texto: #333;
-            --sombra: 0 0 20px rgba(0, 0, 0, 0.1);
-            --borda-radius: 10px;
-        }
-
         body {
-            margin: 0;
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: var(--cor-fundo);
-            font-family: 'Merriweather', serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg==');
-            line-height: 1.6;
+            background: linear-gradient(135deg, #00a651, #fedc00);
+            color: #333;
         }
 
         .container {
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
         }
 
-        .proverbio-box {
-            background: #fff5e6;
-            padding: 30px;
-            border-radius: var(--borda-radius);
-            box-shadow: var(--sombra);
-            position: relative;
-            border: 2px solid var(--cor-primaria);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .proverbio-box:hover {
-            transform: translateY(-3px);
-        }
-
-        .biblia-header {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.8rem;
-            color: var(--cor-primaria);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--cor-primaria);
-            padding-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        #proverbioTexto {
-            font-size: 1.4rem;
-            color: var(--cor-texto);
-            margin: 20px 0;
-            min-height: 100px;
-        }
-
-        .reference {
-            font-style: italic;
-            color: #666;
-            margin-top: 20px;
-            font-size: 1.1rem;
-        }
-
-        .watermark {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            color: rgba(139, 69, 19, 0.3);
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.2rem;
-            user-select: none;
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 150px;
+            border: 2px solid #00a651;
+            border-radius: 5px;
         }
 
         button {
-            background: var(--cor-primaria);
-            color: #fff;
+            background: #00a651;
+            color: white;
+            padding: 12px 24px;
             border: none;
-            padding: 15px 30px;
             border-radius: 25px;
-            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 16px;
+            margin: 10px 0;
         }
 
-        button:hover {
-            background: var(--cor-secundaria);
-            transform: scale(1.05);
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
         }
 
-        @media (max-width: 480px) {
-            body { padding: 10px; }
-            .proverbio-box { padding: 20px; }
-            #proverbioTexto { font-size: 1.2rem; }
-            .biblia-header { font-size: 1.6rem; }
-            button { padding: 12px 24px; font-size: 1rem; width: 100%; }
+        .share-btn {
+            background: #25D366;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="proverbio-box" id="proverbioContainer">
-            <div class="biblia-header">Livro dos Provérbios</div>
-            <p id="proverbioTexto">Carregando provérbio do dia...</p>
-            <div class="reference" id="proverbioReferencia"></div>
-            <div class="watermark">@washingtonverdan</div>
-        </div>
-        <button id="shareButton">📸 Compartilhar Provérbio</button>
+        <h1>⛽ Vale Mais: Gasolina ou Etanol?</h1>
+        
+        <p>Digite os preços atuais:</p>
+        <input type="number" id="gasolina" placeholder="Preço da Gasolina" step="0.01">
+        <input type="number" id="etanol" placeholder="Preço do Etanol" step="0.01">
+        
+        <br>
+        <button onclick="calcular()">Calcular</button>
+        <button onclick="compartilhar()" class="share-btn">Compartilhar Preço 🚗</button>
+
+        <div id="resultado"></div>
     </div>
 
-    
-
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const proverbioTexto = document.getElementById('proverbioTexto');
-    const proverbioReferencia = document.getElementById('proverbioReferencia');
+        function calcular() {
+            const gasolina = parseFloat(document.getElementById('gasolina').value);
+            const etanol = parseFloat(document.getElementById('etanol').value);
+            const resultado = document.getElementById('resultado');
 
-    async function loadProverbio() {
-        try {
-            // 1. Carrega o JSON
-            const response = await fetch('./proverbios.json');
-            if (!response.ok) throw new Error('Erro ao carregar arquivo');
-            
-            // 2. Processa os dados
-            const proverbios = await response.json();
-            if (!proverbios.length) throw new Error('JSON vazio ou inválido');
+            if (!gasolina || !etanol) {
+                alert("Digite ambos os preços!");
+                return;
+            }
 
-            // 3. Gera índice diário fixo
-            const today = new Date();
-            const seed = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-            const index = Math.abs(seed) % proverbios.length;
+            const proporcao = (etanol / gasolina * 100).toFixed(2);
+            const vantagem = proporcao <= 70 ? 'ETANOL' : 'GASOLINA';
+            const economia = vantagem === 'ETANOL' ? `(Economia de ${70 - proporcao}%)` : `(Vantagem de ${proporcao - 70}%)`;
 
-            // 4. Exibe na tela
-            proverbioTexto.textContent = proverbios[index].texto;
-            proverbioReferencia.textContent = proverbios[index].referencia;
-
-        } catch (error) {
-            console.error('Erro:', error);
-            proverbioTexto.textContent = 'Erro ao carregar o provérbio.';
-            proverbioReferencia.textContent = '';
+            resultado.innerHTML = `
+                <h3>Resultado:</h3>
+                <p>Proporção: ${proporcao}%</p>
+                <p style="color: ${vantagem === 'ETANOL' ? '#00a651' : '#2e3192'}; font-weight: bold;">
+                    Melhor opção: ${vantagem} ${economia}
+                </p>
+                <p>Dica: Etanol vale a pena quando custar até 70% do preço da gasolina</p>
+            `;
+            resultado.style.display = 'block';
         }
-// Dentro da função loadProverbio:
-const response = await fetch('./proverbios.json');
-const data = await response.json();
 
-// Achata todos os versículos em um array único
-const allVersiculos = data.capitulos.flatMap(capitulo => 
-    capitulo.versiculos.map(versiculo => ({
-        texto: versiculo.texto,
-        referencia: `Provérbios ${capitulo.capitulo}:${versiculo.versiculo}`
-    }))
-);
+        function compartilhar() {
+            const gasolina = document.getElementById('gasolina').value;
+            const etanol = document.getElementById('etanol').value;
+            
+            const texto = `🔥 Encontrei esses preços:\nGasolina: R$${gasolina}\nEtanol: R$${etanol}\n\nCalcule qual vale mais:\n[LINK DA SUA PÁGINA AQUI]`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Preços de Combustível',
+                    text: texto,
+                    url: window.location.href
+                });
+            } else {
+                prompt("Copie o link para compartilhar:", texto);
+            }
+        }
 
-// Resto do código mantido, usando allVersiculos
-        
-    }
+        // Salva últimos preços digitados
+        window.onload = function() {
+            if(localStorage.getItem('ultimoGasolina')) {
+                document.getElementById('gasolina').value = localStorage.getItem('ultimoGasolina');
+                document.getElementById('etanol').value = localStorage.getItem('ultimoEtanol');
+            }
+        }
 
-    // Compartilhamento (mantido igual)
-    document.getElementById('shareButton').addEventListener('click', () => {
-        html2canvas(document.querySelector("#proverbioContainer")).then(canvas => {
-            const image = canvas.toDataURL("image/png");
-            const link = document.createElement('a');
-            link.download = 'proverbio-do-dia.png';
-            link.href = image;
-            link.click();
-        });
-    });
-
-    loadProverbio();
-});
-
-        
-                </script>
+        window.onbeforeunload = function() {
+            localStorage.setItem('ultimoGasolina', document.getElementById('gasolina').value);
+            localStorage.setItem('ultimoEtanol', document.getElementById('etanol').value);
+        }
+    </script>
 </body>
 </html>
