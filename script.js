@@ -919,10 +919,14 @@
  
 ];    
 
-                        
+                        Função para garantir o fuso horário local
+function getTodayKey() {
+    const data = new Date();
+    return `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
+}
 
 function getDailyProverbio() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayKey();
     const stored = localStorage.getItem('dailyProverbio');
     
     if (stored && stored.startsWith(today)) {
@@ -943,6 +947,12 @@ function updateProverbio() {
 
 async function shareProverbio() {
     try {
+        // Verificação para Instagram
+        if (navigator.userAgent.includes('Instagram')) {
+            alert('Abra no navegador do seu celular para compartilhar!');
+            return;
+        }
+
         const container = document.getElementById('proverbioContainer');
         
         const canvas = await html2canvas(container, {
@@ -953,27 +963,33 @@ async function shareProverbio() {
 
         canvas.toBlob(async (blob) => {
             const file = new File([blob], 'proverbio-diario.png', {type: 'image/png'});
-            const shareData = {
-                files: [file],
-                title: 'Provérbio Diário',
-                text: 'Confira o provérbio de hoje!'
-            };
-
-            if (navigator.canShare && navigator.canShare(shareData)) {
-                await navigator.share(shareData);
+            
+            // Compartilhamento nativo
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'Provérbio Diário',
+                    text: '🌟 Confira o provérbio de hoje!'
+                });
             } else {
+                // Fallback para download
+                const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.download = 'proverbio-diario.png';
-                link.href = URL.createObjectURL(blob);
+                link.href = url;
                 link.click();
-                alert('Imagem baixada! Agora você pode compartilhar pelo Instagram.');
+                URL.revokeObjectURL(url); // Limpeza de memória
+                alert('Imagem salva! Agora você pode compartilhar pelo Instagram.');
             }
-        });
+        }, 'image/png');
     } catch (err) {
-        console.error('Erro ao compartilhar:', err);
+        console.error('Erro:', err);
         alert('Erro ao compartilhar. Tente novamente mais tarde.');
     }
 }
 
-document.getElementById('shareButton').addEventListener('click', shareProverbio);
-updateProverbio();
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    updateProverbio();
+    document.getElementById('shareButton').addEventListener('click', shareProverbio);
+});
